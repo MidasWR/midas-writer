@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package logs_gateway_service;
+
+option go_package = "MidasEdgeV2/pb;pb";
+
+import "google/protobuf/timestamp.proto";
+
+enum SeverityNumber {
+  SEVERITY_UNSPECIFIED = 0;
+  TRACE = 1;
+  DEBUG = 5;
+  INFO = 9;
+  WARN = 13;
+  ERROR = 17;
+  FATAL = 21;
+}
+
+message EventLog {
+  google.protobuf.Timestamp time_unix_nano = 1;
+  SeverityNumber severity = 2;
+  string severity_text = 3;
+  string body = 4;
+  string trace_id = 5;
+  string span_id = 6;
+  map<string,string> attributes = 7;
+  string meta_err = 8;
+}
+message SysLog {
+  google.protobuf.Timestamp time_unix_nano = 1;
+  SeverityNumber severity = 2;
+  string severity_text = 3;
+  string body = 4;
+  string trace_id = 5;
+  string span_id = 6;
+}
+service Request {
+  rpc SendEvent(EventLog) returns (Response);
+  rpc SendSysLog(SysLog) returns (Response);
+}
+
+message Response {
+  string code = 1;
+  string message = 2;
+}
