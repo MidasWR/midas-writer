@@ -1,4 +1,4 @@
-module edge-beta
+module github.com/MidasWR/midas-writer
 
 go 1.25.0
 
